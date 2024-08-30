@@ -25,6 +25,7 @@ from datetime import datetime
 class Tapper:
     def __init__(self, tg_client: Client):
         self.session_name = tg_client.name
+        self.tg_client = tg_client
         self.user_id = 0
         self.username = None
         self.first_name = None
