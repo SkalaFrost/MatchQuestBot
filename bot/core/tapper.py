@@ -431,7 +431,7 @@ class Tapper:
 
         http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
 
-        init_data = self.get_tg_web_data(proxy=proxy)
+        init_data = await self.get_tg_web_data(proxy=proxy)
 
        
         while True:
