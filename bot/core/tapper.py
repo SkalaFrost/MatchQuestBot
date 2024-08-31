@@ -421,6 +421,41 @@ class Tapper:
             print(f"JSON Decode Error: Invalid token")
             return None
 
+    async def check_name(self, http_client: aiohttp.ClientSession,nick_name):
+        url = "https://tgapp-api.matchain.io/api/tgapp/v1/user/check_nickname_is_existed"
+        payload = {"nickname": nick_name}
+        try:
+            async with http_client.post(url, headers=headers, json=payload) as response:
+                response.raise_for_status()
+                jsonres =  await response.json()
+                return jsonres.get("code",'') == 200
+        except aiohttp.ClientResponseError as e:
+            print(f"Request Error: {e}")
+            return None
+        except json.JSONDecodeError:
+            print(f"JSON Decode Error: Invalid token")
+            return None
+    
+    async def register(self, http_client: aiohttp.ClientSession,nick_name,init_data):
+        url = "https://tgapp-api.matchain.io/api/tgapp/v1/user/check_nickname_is_existed"
+        payload = {"uid":self.user_id,
+                   "first_name":self.first_name,
+                   "last_name":self.last_name,
+                   "nickname":nick_name,
+                   "invitor":"d5747e9a44b78865a034716d1d943d6a" if settings.REF_ID == '' else settings.REF_ID,
+                   "tg_login_params":init_data}
+        try:
+            async with http_client.post(url, headers=headers, json=payload) as response:
+                response.raise_for_status()
+                jsonres =  await response.json()
+                return jsonres.get("code",'') == 200
+        except aiohttp.ClientResponseError as e:
+            print(f"Request Error: {e}")
+            return None
+        except json.JSONDecodeError:
+            print(f"JSON Decode Error: Invalid token")
+            return None
+
     def format_balance(self, balance):
         if balance < 1000:
             return str(balance)
@@ -611,8 +646,17 @@ class Tapper:
                     await asyncio.sleep(delay=second)
 
                 elif get_token_response.get('err') == 'user not found':
-                    self.error("Please create account first, click here: https://t.me/MatchQuestBot/start?startapp=8e75e9247d4dd564cfa3ef82c3ea1cc6")
-                    break
+                    self.info("Start creating account!")
+                    nick_name = self.first_name
+                    while not await self.check_name(http_client=http_client,nick_name=nick_name):
+                        self.info("Nick name is already used, creating new one...")
+                        nick_name = random.choice(string.ascii_lowercase) + ''.join(random.choices(string.ascii_lowercase + string.digits, k=7))
+                    _register = await self.register(http_client=http_client,nick_name=nick_name,init_data=init_data)
+                    if _register:
+                        self.success("Registered successfully")
+                        await asyncio.sleep(random.randint(2,10))
+                    else:
+                        self.error("Registration error, please try to register manually.")
             
             except Exception as error:
                 logger.error(f"<light-yellow>{self.session_name}</light-yellow> | Unknown error: {error}")
