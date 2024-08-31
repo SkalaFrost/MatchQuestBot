@@ -169,5 +169,5 @@ sessions/
 *.session
 
 user_agents.json
-
+unknown_errors.txt
 *.json
