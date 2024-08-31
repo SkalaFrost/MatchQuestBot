@@ -1,2 +1,0 @@
-2024-09-01 03:25:33.793749	[400 BOT_APP_INVALID]	messages.RequestAppWebView
-2024-09-01 03:26:35.479087	[400 BOT_APP_INVALID]	messages.RequestAppWebView
