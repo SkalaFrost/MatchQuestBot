@@ -104,7 +104,7 @@ async def process() -> None:
         await register_sessions()
 
 
-async def run_tasks(tg_clients: list[Client], tg_web_data:list[str]):
+async def run_tasks(tg_clients: list[Client]):
     proxies = get_proxies()
     proxies_cycle = cycle(proxies) if proxies else None
     tasks = [

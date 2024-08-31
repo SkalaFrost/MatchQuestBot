@@ -25,6 +25,7 @@ from datetime import datetime
 class Tapper:
     def __init__(self, tg_client: Client):
         self.session_name = tg_client.name
+        self.tg_client = tg_client
         self.user_id = 0
         self.username = None
         self.first_name = None
@@ -140,7 +141,7 @@ class Tapper:
                 self.start_param = settings.REF_ID
 
             peer = await self.tg_client.resolve_peer('MatchQuestBot')
-            InputBotApp = types.InputBotAppShortName(bot_id=peer, short_name="app")
+            InputBotApp = types.InputBotAppShortName(bot_id=peer, short_name="start")
 
             web_view = await self.tg_client.invoke(RequestAppWebView(
                 peer=peer,
@@ -169,6 +170,14 @@ class Tapper:
                 await self.tg_client.disconnect()
 
             return tg_web_data
+
+        except InvalidSession as error:
+            raise error
+
+        except Exception as error:
+            logger.error(
+                f"<light-yellow>{self.session_name}</light-yellow> | Unknown error during Authorization: {error}")
+            await asyncio.sleep(delay=3)
 
         except InvalidSession as error:
             raise error
@@ -298,7 +307,8 @@ class Tapper:
                 res =  await response.json()
                 todo_task = []
                 for task,items in res["data"].items():
-                    todo_task.extend(items)
+                    if items:
+                        todo_task.extend(items)
                 return todo_task
         except aiohttp.ClientResponseError as e:
             print(f"Request Error: {e}")
@@ -430,14 +440,14 @@ class Tapper:
 
         http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
 
-        init_data = self.get_tg_web_data(proxy=proxy)
+        init_data = await self.get_tg_web_data(proxy=proxy)
 
        
         while True:
             try:
                 user_data = self.parse_user_data(init_data)
                 get_token_response = await self.get_token(http_client=http_client,line=init_data,user_data=user_data)
-                if get_token_response:
+                if get_token_response.get('code') == 200:
                     access_token = get_token_response['data'].get('token')
                     http_client.headers["Authorization"] = f"{access_token}"
                     
@@ -597,8 +607,12 @@ class Tapper:
                                             self.error(f"[ Game ]: Game could not be played ")
                         else:
                             self.info(f"[ Game ]: Ticket could not be retrieved")
-                self.info(f"[ Farming ]: Sleeping {second}s")
-                await asyncio.sleep(delay=second)
+                    self.info(f"[ Farming ]: Sleeping {second}s")
+                    await asyncio.sleep(delay=second)
+
+                elif get_token_response.get('err') == 'user not found':
+                    self.error("Please create account first, click here: https://t.me/MatchQuestBot/start?startapp=8e75e9247d4dd564cfa3ef82c3ea1cc6")
+                    break
             
             except Exception as error:
                 logger.error(f"<light-yellow>{self.session_name}</light-yellow> | Unknown error: {error}")
