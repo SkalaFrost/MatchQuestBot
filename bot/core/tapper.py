@@ -448,6 +448,7 @@ class Tapper:
             async with http_client.post(url, headers=headers, json=payload) as response:
                 response.raise_for_status()
                 jsonres =  await response.json()
+                self.debug(f"resgister response: {jsonres}")
                 return jsonres.get("code",'') == 200
         except aiohttp.ClientResponseError as e:
             print(f"Request Error: {e}")

@@ -7,12 +7,12 @@ class Settings(BaseSettings):
     API_ID: int = 123
     API_HASH: str = '123'
 
-    USE_DAILY_BOOSTER: bool =  True
     AUTO_PLAY_GAME: bool =  True
     AUTO_TASK: bool = True 
-    USE_REF: bool = False
-    REF_ID: str = ''
     POINTS: list = [150,300]
+
+    REF_ID: str = ''
+
     USE_PROXY_FROM_FILE: bool = False
 
 

@@ -17,9 +17,9 @@
 |        Settings         |                                 Description                                  |
 |:-----------------------:|:----------------------------------------------------------------------------:|
 |  **API_ID / API_HASH**  |   Platform data from which to run the Telegram session (default - android)   |
-|     **PLAY_GAMES**      |              Play games or just start farming (default is True)              |
-|       **POINTS**        |        Points per game (default is [190, 230] ((That is, 190 to 230)         |
-|       **USE_REF**       |         Register accounts with ur referral or not (default - False)          |
+|     **AUTO_PLAY_GAME**      |              Play games or just start farming (default is True)              |
+|     **AUTO_TASK**      |              Do task or not (default is True)              |
+|       **POINTS**        |        Points per game (default is [150, 300] ((That is, 150 to 300)         |
 |       **REF_ID**        |   Your referral argument (comes after app/startapp? in your referral link)   |
 | **USE_PROXY_FROM_FILE** | Whether to use a proxy from the `bot/config/proxies.txt` file (True / False) |
 
