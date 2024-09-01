@@ -9,8 +9,7 @@
 |:--------------------------------------------------:|:---------:|
 |                   Multithreading                   |     ✅     |
 |              Proxy binding to session              |     ✅     |
-| Auto-register your account with your referral link |     ✅     |
-|      Auto-game with a choice of random points      |     ✅     |
+|      Auto-game, Auto-task      |     ✅     |
 |           Support for pyrogram .session            |     ✅     |
 
 
@@ -20,7 +19,6 @@
 |     **AUTO_PLAY_GAME**      |              Play games or just start farming (default is True)              |
 |     **AUTO_TASK**      |              Do task or not (default is True)              |
 |       **POINTS**        |        Points per game (default is [150, 300] ((That is, 150 to 300)         |
-|       **REF_ID**        |   Your referral argument (comes after app/startapp? in your referral link)   |
 | **USE_PROXY_FROM_FILE** | Whether to use a proxy from the `bot/config/proxies.txt` file (True / False) |
 
 ## Quick Start 📚
